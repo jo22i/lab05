@@ -22,7 +22,7 @@ $ git add third-party/gtest
 
 2. Создаём минимальный файл `CMakeLists.txt` для сборки библиотеки `banking`
 
-```sh
+```cmake
 cmake_minimum_required(VERSION 3.10)
 
 set(CMAKE_CXX_STANDARD 11)
@@ -36,7 +36,7 @@ add_library(Transaction STATIC Transaction.cpp Transaction.h)
 
 3. Добавляем в файл `CMakeLists.txt` модуль для запуска тестов библиотеки `banking`
 
-```sh
+```cmake
 if(BUILD_TESTS)
   enable_testing()
   add_subdirectory(third-party/gtest)
