@@ -1,0 +1,32 @@
+name: lab05
+
+on:
+  push:
+    branches: [ master ]
+  pull:
+    branches: [ master ]
+
+  workflow_dispatch:
+
+jobs:
+  Build_and_Test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: checkout
+        uses: actions/checkout@v3
+
+      - name: build&test
+        run: |
+          cmake -H. -B_build -DBUILD_TESTS=ON
+          cmake --build _build
+          cmake --build _build --target test
+          cmake --build _build --target test -- ARGS=--verbose
+        shell: bash
+        working-directory: banking
+
+     - name: upload artifacts
+       uses: actions/upload-artifact@v3
+       with:
+         path:
+           ../banking/_build
