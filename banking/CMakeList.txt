@@ -5,8 +5,8 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 project(banking)
 
-add_library(Account STATIC Account.cpp Account.h)
-add_library(Transaction STATIC Transaction.cpp Transaction.h)
+add_library(Account STATIC Account.cpp)
+add_library(Transaction STATIC Transaction.cpp)
 
 if(BUILD_TESTS)
   enable_testing()
