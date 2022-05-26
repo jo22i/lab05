@@ -2,7 +2,7 @@
 
 //Добавить модули для проверки Account
 
-TEST(_, ChangeAndReturnBalance)
+TEST(Banking, ChangeAndReturnBalance)
 {
 	Account temp(123, 0);
 	temp.ChangeBalance(500000);
@@ -10,7 +10,7 @@ TEST(_, ChangeAndReturnBalance)
 	ASSERT_EQ(geBalance, 500000);
 }
 
-TEST(_, TryToChangeBalanceWhileLock)
+TEST(Banking, TryToChangeBalanceWhileLock)
 {
 	Accounr temp(1337, 2680);
 }
