@@ -1,16 +1,20 @@
-#include <third-party/gtest/gtest.h>
+#include "gtest/gtest.h"
+#include "gmock/gmock.h"
+#include "./banking/Account.h"
+#include "./banking/Transaction.h"
 
 //Добавить модули для проверки Account
-
-TEST(Banking, ChangeAndReturnBalance)
+class MockAccount: public Acount
 {
-	Account temp(123, 0);
-	temp.ChangeBalance(500000);
-	int getBalance = temp.GetBalance();
-	ASSERT_EQ(geBalance, 500000);
+	MockAccount(int id, int balance) : Account(id, balance) {};
+	MOCK_METHOD(GetBalance, (), (ovverride));
+	MOCK_METHOD(ChangeBalance, (int diff), (ovverride));
+	MOCK_METHOD(Lock, (), (ovverride));
+	MOCK_METHOD(Unlock, (), (ovverride));
+	MOCK_METHOD(~Account, (), (ovverride));
 }
 
-TEST(Banking, TryToChangeBalanceWhileLock)
+class MockTransaction: public Transaction
 {
-	Accounr temp(1337, 2680);
+	MOCK_METHOD(~Transaction, (), (ovverride));
 }
