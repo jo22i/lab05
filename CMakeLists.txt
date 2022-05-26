@@ -1,0 +1,20 @@
+cmake_minimum_required(VERSION 3.22)
+
+SET(COVERAGE OFF CACHE BOOL "Coverage")
+SET(CMAKE_CXX_COMPILER "/usr/bin/g++")
+
+project(GTestsAndCoverage)
+
+add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/third-party/gtest" "gtest")
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/banking)
+
+add_executable(${CMAKE_CURRENT_SOURCE_DIR}/GTests.cpp)
+
+if (COVERAGE)
+    target_compile_options(RunTest PRIVATE --coverage)
+    target_link_libraries(RunTest PRIVATE --coverage)
+endif()
+
+target_include_directories(GTestsAndCoverage PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/banking)
+
+target_include_libraries(GTestsAndCoverage PRIVATE gtest gtest_main gmock_main banking)
