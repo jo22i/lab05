@@ -11,8 +11,8 @@ add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/banking)
 add_executable(${CMAKE_CURRENT_SOURCE_DIR}/GTests.cpp)
 
 if (COVERAGE)
-    target_compile_options(RunTest PRIVATE --coverage)
-    target_link_libraries(RunTest PRIVATE --coverage)
+    target_compile_options(GTest_tests PRIVATE --coverage)
+    target_link_libraries(GTest_tests PRIVATE --coverage)
 endif()
 
 target_include_directories(GTestsAndCoverage PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/banking)
