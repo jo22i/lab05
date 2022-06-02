@@ -6,15 +6,20 @@
 //Добавить модули для проверки Account
 class MockAccount: public Acount
 {
-	MockAccount(int id, int balance) : Account(id, balance) {};
-	MOCK_METHOD(GetBalance, (), (ovverride));
-	MOCK_METHOD(ChangeBalance, (int diff), (ovverride));
-	MOCK_METHOD(Lock, (), (ovverride));
-	MOCK_METHOD(Unlock, (), (ovverride));
-	MOCK_METHOD(~Account, (), (ovverride));
+	MOCK_METHOD(Account, ());
+	MOCK_METHOD(GetBalance, (), (override));
+	MOCK_METHOD(ChangeBalance, (int diff), (override));
+	MOCK_METHOD(Lock, (), (override));
+	MOCK_METHOD(Unlock, (), (override));
+	MOCK_METHOD(~Account, (), (override));
 }
 
 class MockTransaction: public Transaction
 {
-	MOCK_METHOD(~Transaction, (), (ovverride));
+	MOCK_METHOD(~Transaction, (), (override));
+	MOCL_METHOD(Transaction, ());
+
+  	bool Make(Account& from, Account& to, int sum);
+  	int fee() const { return fee_; }
+  	void set_fee(int fee) { fee_ = fee; }
 }
