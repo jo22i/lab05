@@ -1,0 +1,60 @@
+name: GMock_Tests
+on:
+  push:
+  
+jobs:
+  Build_Banking:
+    runs-on: ubuntu-latest
+      steps:
+        - uses: actions/checkout@v3
+        - name: build *banking* lib
+          shell: bash
+          run: |
+            git submodule update --init
+            cmake -H. -B_build
+            cmake --build _build
+          working-directory: banking
+          
+  Testing_With_GMock:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: update
+        run:  |
+          git submodule update --init
+          sudo apt install lcov
+          sudo apt install g++-7
+      
+      - name: test
+        shell: bash
+        run: |
+          mkdir _build && cd _build
+          CXX=/usr/bin/g++-7 cmake -DCOVERAGE=1 ..
+          cmake --build .
+          ./RunTest
+          lcov -t "QuickSort" -o lcov.info -c -d .
+          lcov --remove lcov.info '/home/runner/work/lab05/lab05/third-party/gtest/*' -o lcov.info ###
+          lcov --remove lcov.info '/usr/include/*' -o lcov.info
+      - needs: Build_Banking
+          
+  Coveralls:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: CovBeg
+        uses: coverallsapp/github-action@master
+        with:
+          github-token: ${{ secrets.github_token }}
+          parallel: true
+          path-to-lcov: ./_build/lcov.info
+          coveralls-endpoint: https://coveralls.io
+          
+      - name: CovFin
+        uses: coverallsapp/github-action@master
+        with:
+         github-token: ${{ secrets.github_token }}
+         parallel-finished: true
+         
+      - needs: [Build_Banking, Testing_With_GMock]
