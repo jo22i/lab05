@@ -8,7 +8,6 @@ using ::testing::AtLeast;
 // Mock-class for "Account" class 
 class MockAccount: public Account
 {
-public:
     MockAccount(int id, int balance) : Account(id, balance) {}
     MOCK_METHOD(void, Account, (int id, int balance));
     //MOCK_METHOD(void, ~Account, (), (override));
@@ -22,7 +21,6 @@ public:
 // Mock-class for "Transaction" class
 class MockTransaction: public Transaction
 {
-public:
     MOCK_METHOD(void, Transaction, ());
     //MOCK_METHOD(void, ~Transaction, (), (override));
     MOCK_METHOD(bool, Make, (Account& from, Account& to, int sum));
