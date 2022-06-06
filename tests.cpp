@@ -9,7 +9,7 @@ using ::testing::AtLeast;
 // Mock-class for "Account" class 
 class MockAccount: public Account
 {
-    MockAccount(int id, int balance) : Account(id, balance) {}
+    MockAccount(int id, int balance) : Account::Account(id, balance) {}
     MOCK_METHOD(void, Account, (int id, int balance));
     //MOCK_METHOD(void, ~Account, (), (override));
     MOCK_METHOD(int, GetBalance, (), (const, override));
