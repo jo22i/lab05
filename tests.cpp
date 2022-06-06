@@ -37,7 +37,7 @@ TEST(Account, MockAccountTest)
     EXPECT_CALL(m_acc, Lock()).Times(AtLeast(1));
     EXPECT_CALL(m_acc, Unlock()).Times(AtLeast(1));
     EXPECT_CALL(m_acc, id()).Times(AtLeast(1));
-    EXPECT_CALL(m_acc, ~Account()).Times(AtLeast(1));
+   // EXPECT_CALL(m_acc, ~Account()).Times(AtLeast(1));
     
     EXPECT_EQ(m_acc.id(), 69);
     EXPECT_EQ(m_acc.GetBalance(), 0);
