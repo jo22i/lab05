@@ -1,7 +1,8 @@
-#include "gtest/gtest.h"
-#include "gmock/gmock.h"
-#include "./banking/Account.h"
-#include "./banking/Transaction.h"
+#include <gtest/gtest.h>
+#include <gmock/gmock.h>
+#include <Account.h>
+#include <Transaction.h>
+#include <iostream>
 
 using ::testing::AtLeast;
 
@@ -34,7 +35,7 @@ TEST(Account, MockAccountTest)
     MockAccount m_acc(69, 0);
     
     EXPECT_CALL(m_acc, GetBalance()).Times(AtLeast(2));
-    EXPECT_CALL(m_acc, ChangeBalance()).Times(AtLeast(1));
+    EXPECT_CALL(m_acc, ChangeBalance(testing::_)).Times(AtLeast(1));
     EXPECT_CALL(m_acc, Lock()).Times(AtLeast(1));
     EXPECT_CALL(m_acc, Unlock()).Times(AtLeast(1));
     EXPECT_CALL(m_acc, id()).Times(AtLeast(1));
@@ -55,9 +56,9 @@ TEST(Transaction, MockTransactionTest)
     MockAccount m_acc1(11, 1000);
     MockAccount m_acc2(22, 0);
     
-    EXPECT_CALL(m_tran, set_fee()).Times(AtLeast(1));
+    EXPECT_CALL(m_tran, set_fee(testing::_)).Times(AtLeast(1));
     EXPECT_CALL(m_tran, fee()).Times(AtLeast(2));
-    EXPECT_CALL(m_tran, Make()).Times(AtLeast(1));
+    EXPECT_CALL(m_tran, Make(testing::_, testing::_, testing::_)).Times(AtLeast(1));
     
     EXPECT_CALL(m_acc1, Lock()).Times(AtLeast(1));
     EXPECT_CALL(m_acc2, Lock()).Times(AtLeast(1));
@@ -65,11 +66,11 @@ TEST(Transaction, MockTransactionTest)
     EXPECT_CALL(m_acc1, Unlock()).Times(AtLeast(1));
     EXPECT_CALL(m_acc2, Unlock()).Times(AtLeast(1));
     
-    EXPECT_CALL(m_acc1, ChangeBalance()).Times(AtLeast(1));
+    EXPECT_CALL(m_acc1, ChangeBalance(testing::_)).Times(AtLeast(1));
     EXPECT_CALL(m_acc1, GetBalance()).Times(AtLeast(4));
     EXPECT_CALL(m_acc1, id()).Times(AtLeast(3));
     
-    EXPECT_CALL(m_acc2, ChangeBalance()).Times(AtLeast(1));
+    EXPECT_CALL(m_acc2, ChangeBalance(testing::_)).Times(AtLeast(1));
     EXPECT_CALL(m_acc2, GetBalance()).Times(AtLeast(3));
     EXPECT_CALL(m_acc2, id()).Times(AtLeast(3));
     
@@ -99,7 +100,7 @@ TEST(Account, ExceptionsTest)
 {
     MockAccount m_acc(123, 0);
     
-    EXPECT_CALL(m_acc, ChangeBalance()).Times(AtLeast(1));
+    EXPECT_CALL(m_acc, ChangeBalance(testing::_)).Times(AtLeast(1));
     EXPECT_CALL(m_acc, Lock()).Times(AtLeast(2));
     
     // Attempt to change balance while account not locked
@@ -144,5 +145,4 @@ TEST(Transcation, ExceptionsTest)
     EXPECT_EQ(m_acc1.GetBalance(), 500);
     EXPECT_EQ(m_acc2.GetBalance(), 0);
 }
-
 
