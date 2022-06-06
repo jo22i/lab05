@@ -8,7 +8,7 @@ class MockAccount: public Account
 {
 public:
     MOCK_METHOD(void, Account, (int id, int balance));
-    MOCK_METHOD(void, ~Account, (), (override));
+    //MOCK_METHOD(void, ~Account, (), (override));
     MOCK_METHOD(int, GetBalance, (), (const, override));
     MOCK_METHOD(void, ChangeBalance, (int diff), (override));
     MOCK_METHOD(void, Lock, (), (override));
@@ -21,7 +21,7 @@ class MockTransaction: public Transaction
 {
 public:
     MOCK_METHOD(void, Transaction, ());
-    MOCK_METHOD(void, ~Transaction, (), (override));
+    //MOCK_METHOD(void, ~Transaction, (), (override));
     MOCK_METHOD(bool, Make, (Account& from, Account& to, int sum));
     MOCK_METHOD(int, fee, (), (const));
     MOCK_METHOD(void, set_fee, (int fee));
