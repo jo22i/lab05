@@ -8,13 +8,13 @@ project(GTest_tests)
 add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/third-party/gtest" "gtest")
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/banking)
 
-add_executable(${CMAKE_CURRENT_SOURCE_DIR}/tests.cpp)
+add_executable(RunExec ${CMAKE_CURRENT_SOURCE_DIR}/tests.cpp)
 
 if (COVERAGE)
-    target_compile_options(GTest_tests PRIVATE --coverage)
-    target_link_libraries(GTest_tests PRIVATE --coverage)
+    target_compile_options(RunExec PRIVATE --coverage)
+    target_link_libraries(RunExec PRIVATE --coverage)
 endif()
 
-target_include_directories(GTest_tests PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/banking)
+target_include_directories(RunExec PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/banking)
 
-target_include_libraries(GTest_tests PRIVATE gtest gtest_main gmock_main banking)
+target_include_libraries(RunExec PRIVATE gtest gtest_main gmock_main banking)
