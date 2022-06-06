@@ -7,24 +7,24 @@
 class MockAccount: public Account
 {
 public:
-    MOCK_METHOD(Account, (int id, int balance));
-    MOCK_METHOD(~Account, (), (override));
-    MOCK_METHOD(GetBalance, (), (override));
-    MOCK_METHOD(ChangeBalance, (int diff), (override));
-    MOCK_METHOD(Lock, (), (override));
-    MOCK_METHOD(Unlock, (), (override));
-    MOCK_METHOD(id, ());
+    MOCK_METHOD(void, Account, (int id, int balance));
+    MOCK_METHOD(void, ~Account, (), (override));
+    MOCK_METHOD(int, GetBalance, (), (const, override));
+    MOCK_METHOD(void, ChangeBalance, (int diff), (override));
+    MOCK_METHOD(void, Lock, (), (override));
+    MOCK_METHOD(void, Unlock, (), (override));
+    MOCK_METHOD(int, id, (), (const));
 }
 
 // Mock-class for "Transaction" class
 class MockTransaction: public Transaction
 {
 public:
-    MOCK_METHOD(Transaction, ());
-    MOCK_METHOD(~Transaction, (), (override));
-    MOCK_METHOD(Make, (Account& from, Account& to, int sum));
-    MOCK_METHOD(fee, ());
-    MOCK_METHOD(set_fee, (int fee));
+    MOCK_METHOD(void, Transaction, ());
+    MOCK_METHOD(void, ~Transaction, (), (override));
+    MOCK_METHOD(bool, Make, (Account& from, Account& to, int sum));
+    MOCK_METHOD(int, fee, (), (const));
+    MOCK_METHOD(void, set_fee, (int fee));
 }
 
 // Testing basic features of the "MockAccount" class
