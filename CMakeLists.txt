@@ -8,7 +8,7 @@ project(GTest_tests)
 add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/third-party/gtest" "gtest")
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/banking)
 
-add_executable(${CMAKE_CURRENT_SOURCE_DIR}/GTests.cpp)
+add_executable(${CMAKE_CURRENT_SOURCE_DIR}/tests.cpp)
 
 if (COVERAGE)
     target_compile_options(GTest_tests PRIVATE --coverage)
