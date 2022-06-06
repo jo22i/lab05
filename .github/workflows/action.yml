@@ -5,18 +5,19 @@ on:
 jobs:
   Build_Banking:
     runs-on: ubuntu-latest
-      steps:
-        - uses: actions/checkout@v3
-        - name: build *banking* lib
-          shell: bash
-          run: |
-            git submodule update --init
-            cmake -H. -B_build
-            cmake --build _build
-          working-directory: banking
+    steps:
+      - uses: actions/checkout@v3
+      - name: build *banking* lib
+        shell: bash
+        run: |
+          git submodule update --init
+          cmake -H. -B_build
+          cmake --build _build
+        working-directory: banking
           
   Testing_With_GMock:
     runs-on: ubuntu-latest
+    needs: Build_Banking
     steps:
       - uses: actions/checkout@v3
       
@@ -36,10 +37,10 @@ jobs:
           lcov -t "QuickSort" -o lcov.info -c -d .
           lcov --remove lcov.info '/home/runner/work/lab05/lab05/third-party/gtest/*' -o lcov.info ###
           lcov --remove lcov.info '/usr/include/*' -o lcov.info
-      - needs: Build_Banking
           
   Coveralls:
     runs-on: ubuntu-latest
+    needs: [Build_Banking, Testing_With_GMock]
     steps:
       - uses: actions/checkout@v3
       
@@ -56,5 +57,3 @@ jobs:
         with:
          github-token: ${{ secrets.github_token }}
          parallel-finished: true
-         
-      - needs: [Build_Banking, Testing_With_GMock]
