@@ -6,6 +6,7 @@
 // Mock-class for "Account" class 
 class MockAccount: public Account
 {
+public:
     MOCK_METHOD(Account, (int id, int balance));
     MOCK_METHOD(~Account, (), (override));
     MOCK_METHOD(GetBalance, (), (override));
@@ -18,6 +19,7 @@ class MockAccount: public Account
 // Mock-class for "Transaction" class
 class MockTransaction: public Transaction
 {
+public:
     MOCK_METHOD(Transaction, ());
     MOCK_METHOD(~Transaction, (), (override));
     MOCK_METHOD(Make, (Account& from, Account& to, int sum));
