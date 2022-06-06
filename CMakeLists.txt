@@ -17,4 +17,4 @@ endif()
 
 target_include_directories(RunExec PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/banking)
 
-target_include_libraries(RunExec PRIVATE gtest gtest_main gmock_main banking)
+target_link_libraries(RunExec PRIVATE gtest gtest_main gmock_main banking)
