@@ -33,7 +33,7 @@ jobs:
           mkdir _build && cd _build
           CXX=/usr/bin/g++-7 cmake -DCOVERAGE=1 ..
           cmake --build .
-          ./GTest_tests
+          ./RunExec
           lcov -t "QuickSort" -o lcov.info -c -d .
           lcov --remove lcov.info '/home/runner/work/lab05/lab05/third-party/gtest/*' -o lcov.info ###
           lcov --remove lcov.info '/usr/include/*' -o lcov.info
