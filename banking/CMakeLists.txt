@@ -5,5 +5,4 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 project(banking)
 
-add_library(Account STATIC Account.cpp)
-add_library(Transaction STATIC Transaction.cpp)
+add_library(banking STATIC Account.cpp Transaction.cpp)
