@@ -11,24 +11,21 @@ class MockAccount: public Account
 {
 public:
     MockAccount(int id, int balance) : Account::Account(id, balance) {}
-    //MOCK_METHOD(void, Account, (int id, int balance));
-    //MOCK_METHOD(void, ~Account, (), (override));
-    MOCK_METHOD(int, GetBalance, (), (const, override));
-    MOCK_METHOD(void, ChangeBalance, (int diff), (override));
-    MOCK_METHOD(void, Lock, (), (override));
-    MOCK_METHOD(void, Unlock, (), (override));
-    MOCK_METHOD(int, id, (), (const));
+    MOCK_METHOD0(GetBalance, int());
+    MOCK_METHOD1(ChangeBalance, void(int diff));
+    MOCK_METHOD0(Lock, void());
+    MOCK_METHOD0(Unlock, void());
+    MOCK_METHOD0(id, void());
 };
 
 // Mock-class for "Transaction" class
 class MockTransaction: public Transaction
 {
 public:
-    MOCK_METHOD(void, Transaction, ());
-    //MOCK_METHOD(void, ~Transaction, (), (override));
-    MOCK_METHOD(bool, Make, ((Account& from), (Account& to), (int sum)));
-    MOCK_METHOD(int, fee, (), (const));
-    MOCK_METHOD(void, set_fee, (int fee));
+    MOCK_METHOD0(Transaction, void());
+    MOCK_METHOD3(Make, bool(Account& from, Account& to, int sum));
+    MOCK_METHOD0(fee, int());
+    MOCK_METHOD1(set_fee, void(int fee));
 };
 
 // Testing basic features of the "MockAccount" class
