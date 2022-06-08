@@ -1,10 +1,14 @@
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
-#include <Account.h>
-#include <Transaction.h>
+#include "Account.h"
+#include "Transaction.h"
 #include <iostream>
 
-using ::testing::AtLeast;
+using testing::Return;
+using testing::_;
+using testing::Times;
+using testing::WillOnce;
+using testing::WillRepeatedly;
 
 // Mock-class for "Account" class 
 class MockAccount: public Account
@@ -22,7 +26,6 @@ public:
 class MockTransaction: public Transaction
 {
 public:
-    MOCK_METHOD0(Transaction, void());
     MOCK_METHOD3(Make, bool(Account& from, Account& to, int sum));
     MOCK_METHOD0(fee, int());
     MOCK_METHOD1(set_fee, void(int fee));
@@ -33,17 +36,21 @@ TEST(Account, MockAccountTest)
 {
     MockAccount m_acc(69, 0);
     
-    EXPECT_CALL(m_acc, GetBalance()).Times(AtLeast(2));
+    EXPECT_CALL(m_acc, GetBalance())
+        .Times(2)
+        .WillOnce(Return(0))
+        .WillOnce(Return(123));
     EXPECT_CALL(m_acc, ChangeBalance(testing::_)).Times(AtLeast(1));
-    EXPECT_CALL(m_acc, Lock()).Times(AtLeast(1));
-    EXPECT_CALL(m_acc, Unlock()).Times(AtLeast(1));
-    EXPECT_CALL(m_acc, id()).Times(AtLeast(1));
-   // EXPECT_CALL(m_acc, ~Account()).Times(AtLeast(1));
+    EXPECT_CALL(m_acc, Lock()).Times(1);
+    EXPECT_CALL(m_acc, Unlock()).Times(1);
+    EXPECT_CALL(m_acc, id())
+        .Times(1)
+        .WillOnce(Return(69));
     
-    EXPECT_EQ(m_acc.id(), 69);
-    EXPECT_EQ(m_acc.GetBalance(), 0);
+    m_acc.id();
+    m_acc.GetBalance();
     m_acc.ChangeBalance(123);
-    EXPECT_EQ(m_acc.GetBalance(), 123);
+    m_acc.GetBalance();
     m_acc.Lock();
     m_acc.Unlock();
 }
@@ -55,27 +62,34 @@ TEST(Transaction, MockTransactionTest)
     MockAccount m_acc1(11, 1000);
     MockAccount m_acc2(22, 0);
     
-    EXPECT_CALL(m_tran, set_fee(testing::_)).Times(AtLeast(1));
-    EXPECT_CALL(m_tran, fee()).Times(AtLeast(2));
-    EXPECT_CALL(m_tran, Make(testing::_, testing::_, testing::_)).Times(AtLeast(1));
+    EXPECT_CALL(m_tran, set_fee(testing::_)).Times(1);
+    EXPECT_CALL(m_tran, fee())
+        .Times(2)
+        .WillOnce(Return(1))
+        .WillOnce(Return(19);
+    EXPECT_CALL(m_tran, Make(testing::_, testing::_, testing::_)).Times(1);
     
-    EXPECT_CALL(m_acc1, Lock()).Times(AtLeast(1));
-    EXPECT_CALL(m_acc2, Lock()).Times(AtLeast(1));
+    EXPECT_CALL(m_acc1, Lock()).Times(1);
+    EXPECT_CALL(m_acc2, Lock()).Times(1);
     
-    EXPECT_CALL(m_acc1, Unlock()).Times(AtLeast(1));
-    EXPECT_CALL(m_acc2, Unlock()).Times(AtLeast(1));
+    EXPECT_CALL(m_acc1, Unlock()).Times(1);
+    EXPECT_CALL(m_acc2, Unlock()).Times(1);
     
-    EXPECT_CALL(m_acc1, ChangeBalance(testing::_)).Times(AtLeast(1));
-    EXPECT_CALL(m_acc1, GetBalance()).Times(AtLeast(4));
-    EXPECT_CALL(m_acc1, id()).Times(AtLeast(3));
+    EXPECT_CALL(m_acc1, ChangeBalance(testing::_)).Times(1);
+    EXPECT_CALL(m_acc1, GetBalance()).Times(4);
+    EXPECT_CALL(m_acc1, id())
+        .Times(3)
+        .WillRepeatedly(Return(11));
     
-    EXPECT_CALL(m_acc2, ChangeBalance(testing::_)).Times(AtLeast(1));
-    EXPECT_CALL(m_acc2, GetBalance()).Times(AtLeast(3));
-    EXPECT_CALL(m_acc2, id()).Times(AtLeast(3));
-    
+    EXPECT_CALL(m_acc2, ChangeBalance(testing::_)).Times(1);
+    EXPECT_CALL(m_acc2, GetBalance()).Times(3);
+    EXPECT_CALL(m_acc2, id())
+        .Times(3)
+        .WillRepeatedly(Return(22));
+                  
     // Checking of "id" values for both accounts
-    EXPECT_EQ(m_acc1.id(), 11);
-    EXPECT_EQ(m_acc2.id(), 22);
+    m_acc1.id();
+    m_acc2.id();
     
     // Checking account balances
     EXPECT_EQ(m_acc1.GetBalance(), 1000);
@@ -87,7 +101,7 @@ TEST(Transaction, MockTransactionTest)
     EXPECT_EQ(m_tran.fee(), 19);
     
     // Checking for the success of the operation
-    EXPECT_EQ(m_tran.Make(m_acc1, m_acc2, 123), true);
+    EXPECT_TRUE(m_tran.Make(m_acc1, m_acc2, 123));
     
     // Checking of balances after transaction
     EXPECT_EQ(m_acc1.GetBalance(), 858);
@@ -99,14 +113,11 @@ TEST(Account, ExceptionsTest)
 {
     MockAccount m_acc(123, 0);
     
-    EXPECT_CALL(m_acc, ChangeBalance(testing::_)).Times(AtLeast(1));
-    EXPECT_CALL(m_acc, Lock()).Times(AtLeast(2));
-    
     // Attempt to change balance while account not locked
     EXPECT_THROW(m_acc.ChangeBalance(), std::runtime_error);
     
     // Attempt to lock a locked account
-    m_acc.Lock();
+    EXPECT_NO_THROW(m_acc.Lock());
     EXPECT_THROW(m_acc.Lock(), std::runtime_error);
 }
 
@@ -128,17 +139,20 @@ TEST(Transcation, ExceptionsTest)
     
     // Test fourth "if" exception
     m_tran.set_fee(51);
-    EXPECT_EQ(m_tran.Make(m_acc1, m_acc2, 100), false);
+    EXPECT_EQ(m_tran.fee(), 51);
+    EXPECT_FALSE(m_tran.Make(m_acc1, m_acc2, 100));
     
     // Test "Debit" function exception then sum = 0 (fee >= sum)
     m_tran.set_fee(-3060);
+    EXPECT_EQ(m_tran.fee(), -3060);
     EXPECT_ANY_THROW(m_tran.Make(m_acc1, m_acc2, 100));
     
     // Test if operation "Make" don't make transaction
     m_tran.set_fee(5);
+    EXPECT_EQ(m_tran.fee(), 5);
     
     /* Checking for the failure of the operation */
-    EXPECT_EQ(m_tran.Make(m_acc1, m_acc2, 499), false);
+    EXPECT_FALSE(m_tran.Make(m_acc1, m_acc2, 499));
     
     /* Checking accounts for no changes */
     EXPECT_EQ(m_acc1.GetBalance(), 500);
