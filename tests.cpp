@@ -4,11 +4,11 @@
 #include "Transaction.h"
 #include <iostream>
 
-using testing::Return;
-using testing::_;
-using testing::Times;
-using testing::WillOnce;
-using testing::WillRepeatedly;
+using ::testing::Return;
+using ::testing::_;
+using ::testing::Times;
+using ::testing::WillOnce;
+using ::testing::WillRepeatedly;
 
 // Mock-class for "Account" class 
 class MockAccount: public Account
@@ -40,7 +40,7 @@ TEST(Account, MockAccountTest)
         .Times(2)
         .WillOnce(Return(0))
         .WillOnce(Return(123));
-    EXPECT_CALL(m_acc, ChangeBalance(testing::_)).Times(AtLeast(1));
+    EXPECT_CALL(m_acc, ChangeBalance(_)).Times(1);
     EXPECT_CALL(m_acc, Lock()).Times(1);
     EXPECT_CALL(m_acc, Unlock()).Times(1);
     EXPECT_CALL(m_acc, id())
@@ -62,12 +62,12 @@ TEST(Transaction, MockTransactionTest)
     MockAccount m_acc1(11, 1000);
     MockAccount m_acc2(22, 0);
     
-    EXPECT_CALL(m_tran, set_fee(testing::_)).Times(1);
+    EXPECT_CALL(m_tran, set_fee(_)).Times(1);
     EXPECT_CALL(m_tran, fee())
         .Times(2)
         .WillOnce(Return(1))
         .WillOnce(Return(19);
-    EXPECT_CALL(m_tran, Make(testing::_, testing::_, testing::_)).Times(1);
+    EXPECT_CALL(m_tran, Make(_, _, _)).Times(1);
     
     EXPECT_CALL(m_acc1, Lock()).Times(1);
     EXPECT_CALL(m_acc2, Lock()).Times(1);
@@ -75,13 +75,13 @@ TEST(Transaction, MockTransactionTest)
     EXPECT_CALL(m_acc1, Unlock()).Times(1);
     EXPECT_CALL(m_acc2, Unlock()).Times(1);
     
-    EXPECT_CALL(m_acc1, ChangeBalance(testing::_)).Times(1);
+    EXPECT_CALL(m_acc1, ChangeBalance(_)).Times(1);
     EXPECT_CALL(m_acc1, GetBalance()).Times(4);
     EXPECT_CALL(m_acc1, id())
         .Times(3)
         .WillRepeatedly(Return(11));
     
-    EXPECT_CALL(m_acc2, ChangeBalance(testing::_)).Times(1);
+    EXPECT_CALL(m_acc2, ChangeBalance(_)).Times(1);
     EXPECT_CALL(m_acc2, GetBalance()).Times(3);
     EXPECT_CALL(m_acc2, id())
         .Times(3)
