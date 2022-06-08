@@ -11,9 +11,8 @@ using ::testing::WillOnce;
 using ::testing::WillRepeatedly;*/
 
 // Mock-class for "Account" class 
-class MockAccount: public Account
+struct MockAccount: public Account
 {
-public:
     MockAccount(int id, int balance) : Account::Account(id, balance) {}
     MOCK_METHOD(int, GetBalance, (), (const, override));
     MOCK_METHOD(void, ChangeBalance, (int diff), (override));
@@ -23,9 +22,8 @@ public:
 };
 
 // Mock-class for "Transaction" class
-class MockTransaction: public Transaction
+struct MockTransaction: public Transaction
 {
-public:
     MOCK_METHOD(bool, Make, (Account & from, Account & to, int sum));
     MOCK_METHOD(int, fee, ());
     MOCK_METHOD(void, set_fee, (int fee));
