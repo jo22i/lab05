@@ -15,7 +15,7 @@ public:
     MOCK_METHOD1(ChangeBalance, void(int diff));
     MOCK_METHOD0(Lock, void());
     MOCK_METHOD0(Unlock, void());
-    MOCK_METHOD0(id, void());
+    MOCK_METHOD0(id, int());
 };
 
 // Mock-class for "Transaction" class
