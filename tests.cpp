@@ -4,11 +4,11 @@
 #include "Transaction.h"
 #include <iostream>
 
-using ::testing::Return;
+/*using ::testing::Return;
 using ::testing::_;
 using ::testing::Times;
 using ::testing::WillOnce;
-using ::testing::WillRepeatedly;
+using ::testing::WillRepeatedly;*/
 
 // Mock-class for "Account" class 
 class MockAccount: public Account
@@ -66,7 +66,7 @@ TEST(Transaction, MockTransactionTest)
     EXPECT_CALL(m_tran, fee())
         .Times(2)
         .WillOnce(Return(1))
-        .WillOnce(Return(19);
+        .WillOnce(Return(19));
     EXPECT_CALL(m_tran, Make(_, _, _)).Times(1);
     
     EXPECT_CALL(m_acc1, Lock()).Times(1);
