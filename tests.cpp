@@ -37,9 +37,9 @@ TEST(Account, MockAccountTest)
     MockAccount m_acc(69, 0);
     
     EXPECT_CALL(m_acc, GetBalance())
-        .testing::Times(2)
-        .testing::WillOnce(Return(0))
-        .testing::WillOnce(Return(123));
+        .Times(2)
+        .WillOnce(testing::Return(0))
+        .WillOnce(testing::Return(123));
     EXPECT_CALL(m_acc, ChangeBalance(testing::_)).Times(1);
     EXPECT_CALL(m_acc, Lock()).Times(1);
     EXPECT_CALL(m_acc, Unlock()).Times(1);
