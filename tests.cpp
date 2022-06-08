@@ -32,7 +32,7 @@ public:
 };
 
 // Testing basic features of the "MockAccount" class
-TEST(Account, MockAccountTest)
+TEST(AccTest, MockAccountTest)
 {
     MockAccount m_acc(69, 0);
     
@@ -56,7 +56,7 @@ TEST(Account, MockAccountTest)
 }
 
 // Testing basic features of the "MockTransaction" class
-TEST(Transaction, MockTransactionTest)
+TEST(TranscationTest, MockTransactionTest)
 {
     MockTransaction m_tran();
     MockAccount m_acc1(11, 1000);
@@ -109,7 +109,7 @@ TEST(Transaction, MockTransactionTest)
 }
 
 // Testing exceptions for "MockAccount" class 
-TEST(Account, ExceptionsTest)
+TEST(AccTest, ExceptionsTest)
 {
     MockAccount m_acc(123, 0);
     
@@ -122,7 +122,7 @@ TEST(Account, ExceptionsTest)
 }
 
 // Testing exceptions for "MockTransaction" class
-TEST(Transcation, ExceptionsTest)
+TEST(TranscationTest, ExceptionsTest)
 {
     MockAccount m_acc1(1, 500);
     MockAccount m_acc2(2, 0);
