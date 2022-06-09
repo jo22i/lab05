@@ -42,7 +42,7 @@ TEST(Account, MockAccTest)
     m_acc.id();
     m_acc.GetBalance();
     m_acc.Lock();
-    m_acc.ChangeBalance();
+    m_acc.ChangeBalance(9999);
     m_acc.Unlock();
     m_acc.GetBalance();
 }
@@ -51,7 +51,7 @@ TEST(Account, Exceptions)
 {
     MockAccount m_acc(123, 1000);
     
-    EXPECT_THROW(m_acc.ChangeBalance(testing::_), std::runtime_error);
+    EXPECT_THROW(m_acc.ChangeBalance(97521), std::runtime_error);
     EXPECT_NO_THROW(m_acc.Lock());
     EXPECT_THROW(m_acc.Lock(), std::runtime_error);
 }
