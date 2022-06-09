@@ -62,7 +62,7 @@ TEST(Account, Test)
     
     EXPECT_EQ(acc.id(), 123);
     EXPECT_EQ(acc.GetBalance(), 1000);
-    EXPECT_NO_TROW(acc.Lock());
+    EXPECT_NO_THROW(acc.Lock());
     acc.ChangeBalance(9999);
     EXPECT_NO_THROW(acc.Unlock());
     EXPECT_EQ(acc.GetBalance(), 9999);
