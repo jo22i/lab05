@@ -63,9 +63,9 @@ TEST(Account, Test)
     EXPECT_EQ(acc.id(), 123);
     EXPECT_EQ(acc.GetBalance(), 1000);
     EXPECT_NO_THROW(acc.Lock());
-    acc.ChangeBalance(9999);
+    acc.ChangeBalance(234);
     EXPECT_NO_THROW(acc.Unlock());
-    EXPECT_EQ(acc.GetBalance(), 9999);
+    EXPECT_EQ(acc.GetBalance(), 1234);
 }
 
 TEST(Transaction, MockTranTest)
@@ -115,11 +115,13 @@ TEST(Transaction, Exceptions)
     Account acc2(2, 0);
     Transaction T;
     
-    EXPECT_THROW(T.Make(acc1, acc2, 500), std::logic_error);
+    EXPECT_THROW(T.Make(acc1, acc1, 500), std::logic_error);
     EXPECT_THROW(T.Make(acc1, acc2, -1), std::invalid_argument);
     EXPECT_THROW(T.Make(acc1, acc2, 99), std::logic_error);
     
     T.set_fee(51);
+    EXPECT_EQ(T.fee(), 51);
+    
     EXPECT_FALSE(T.Make(acc1, acc2, 100));
     
     EXPECT_FALSE(T.Make(acc1, acc2, 950));
