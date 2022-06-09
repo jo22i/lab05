@@ -49,11 +49,23 @@ TEST(Account, MockAccTest)
 
 TEST(Account, Exceptions)
 {
-    MockAccount m_acc(123, 1000);
+    Account acc(123, 1000);
     
-    EXPECT_THROW(m_acc.ChangeBalance(97521), std::runtime_error);
-    m_acc.Lock();
-    EXPECT_THROW(m_acc.Lock(), std::runtime_error);
+    EXPECT_THROW(acc.ChangeBalance(97521), std::runtime_error);
+    acc.Lock();
+    EXPECT_THROW(acc.Lock(), std::runtime_error);
+}
+
+TEST(Account, Test)
+{
+    Account acc(123, 1000);
+    
+    EXPECT_EQ(acc.id(), 123);
+    EXPECT_EQ(acc.GetBalance(), 1000);
+    EXPECT_NO_TROW(acc.Lock());
+    acc.ChangeBalance(9999);
+    EXPECT_NO_THROW(acc.Unlock());
+    EXPECT_EQ(acc.GetBalance(), 9999);
 }
 
 TEST(Transaction, MockTranTest)
@@ -62,51 +74,53 @@ TEST(Transaction, MockTranTest)
     MockAccount m_acc1(1, 1000);
     MockAccount m_acc2(2, 0);
     
-    /*EXPECT_CALL(m_acc1, id()).Times(4);
-    EXPECT_CALL(m_acc1, Lock()).Times(1);
-    EXPECT_CALL(m_acc1, Unlock()).Times(1);
-    EXPECT_CALL(m_acc1, GetBalance())
-        .Times(4)
-        .WillOnce(testing::Return(1000))
-        .WillOnce(testing::Return(1000))
-        .WillOnce(testing::Return(470))
-        .WillOnce(testing::Return(470));
-    EXPECT_CALL(m_acc1, ChangeBalance(-530)).Times(1);
-    
-    EXPECT_CALL(m_acc2, id()).Times(4);
-    EXPECT_CALL(m_acc2, Lock()).Times(1);
-    EXPECT_CALL(m_acc2, Unlock()).Times(1);
-    EXPECT_CALL(m_acc2, GetBalance())
-        .Times(3)
-        .WillOnce(testing::Return(0))
-        .WillOnce(testing::Return(500))
-        .WillOnce(testing::Return(500));
-    EXPECT_CALL(m_acc2, ChangeBalance(500)).Times(1);*/
-    
-    EXPECT_CALL(m_t, fee())
-        .Times(2)
-        .WillOnce(testing::Return(1))
-        .WillOnce(testing::Return(30));
+    EXPECT_CALL(m_t, fee()).Times(2);
     EXPECT_CALL(m_t, set_fee(30)).Times(1);
-    EXPECT_CALL(m_t, Make(testing::_, testing::_, testing::_))
-        .Times(1)
-        .WillOnce(testing::Return(true));
+    EXPECT_CALL(m_t, Make(testing::_, testing::_, testing::_)).Times(1);
+    
+    m_t.fee();
+    m_t.set_fee(30);
+    m_t.fee();
+    m_t.Make(m_acc1, m_acc2, 500);
+}
+
+TEST(Transaction, Test)
+{
+    Account acc1(1, 1000);
+    Account acc2(2, 0);
+    Transaction T;
     
     //Checking ids values
-    EXPECT_EQ(m_acc1.id(), 1);
-    EXPECT_EQ(m_acc2.id(), 2);
+    EXPECT_EQ(acc1.id(), 1);
+    EXPECT_EQ(acc2.id(), 2);
     
     //Checking balances values
-    EXPECT_EQ(m_acc1.GetBalance(), 1000);
-    EXPECT_EQ(m_acc2.GetBalance(), 0);
+    EXPECT_EQ(acc1.GetBalance(), 1000);
+    EXPECT_EQ(acc2.GetBalance(), 0);
     
     //Checking and editing fee value
-    EXPECT_EQ(m_t.fee(), 1);
-    m_t.set_fee(30);
-    EXPECT_EQ(m_t.fee(), 30);
+    EXPECT_EQ(T.fee(), 1);
+    T.set_fee(30);
+    EXPECT_EQ(T.fee(), 30);
     
-    EXPECT_TRUE(m_t.Make(m_acc1, m_acc2, 500));
+    EXPECT_TRUE(T.Make(acc1, acc2, 500));
     
-    EXPECT_EQ(m_acc1.GetBalance(), 470);
-    EXPECT_EQ(m_acc2.GetBalance(), 500);
+    EXPECT_EQ(acc1.GetBalance(), 470);
+    EXPECT_EQ(acc2.GetBalance(), 500);
+}
+
+TEST(Transaction, Exceptions)
+{
+    Account acc1(1, 1000);
+    Account acc2(2, 0);
+    Transaction T;
+    
+    EXPECT_THROW(T.Make(acc1, acc2, 500), std::logic_error);
+    EXPECT_THROW(T.Make(acc1, acc2, -1), std::invalid_argument);
+    EXPECT_THROW(T.Make(acc1, acc2, 99), std::logic_error);
+    
+    T.set_fee(51);
+    EXPECT_FALSE(T.Make(acc1, acc2, 100));
+    
+    EXPECT_FALSE(T.Make(acc1, acc2, 950));
 }
